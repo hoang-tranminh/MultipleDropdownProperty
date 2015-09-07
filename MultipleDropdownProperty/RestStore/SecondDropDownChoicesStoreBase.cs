@@ -11,7 +11,10 @@ namespace MultipleDropdownProperty.RestStore
     {
         public virtual RestResult Get(string selectedFirstChoiceId, string currentContentId)
         {
-            return base.Rest(GetChoices(selectedFirstChoiceId, currentContentId));
+            if (selectedFirstChoiceId != null && currentContentId != null)
+                return base.Rest(GetChoices(selectedFirstChoiceId, currentContentId));
+            else
+                return base.Rest(new List<ChoiceModel>());
         }
 
         /// <summary>

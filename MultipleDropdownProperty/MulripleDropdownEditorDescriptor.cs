@@ -1,9 +1,4 @@
 ﻿using EPiServer.Shell.ObjectEditing.EditorDescriptors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MultipleDropdownProperty
 {
@@ -15,13 +10,13 @@ namespace MultipleDropdownProperty
     {
         public MultipleDropdownEditorDescriptor()
         {
-            ClientEditingClass = "multipledropdownproperty.multipledropdown.editor";
+            ClientEditingClass = "multipledropdownproperty.scripts.editor";
         }
 
         protected override void SetEditorConfiguration(EPiServer.Shell.ObjectEditing.ExtendedMetadata metadata)
         {
-            EditorConfiguration["apiGetChoices1"] = "http://something.net";
-            EditorConfiguration["apiGetChoices2"] = "http://something.net";
+            EditorConfiguration["choice1StoreName"] = "multipledropdownproperty.firstchoicedropdownreststore";
+            EditorConfiguration["choice2StoreName"] = "multipledropdownproperty.secondchoicedropdownreststore";
             base.SetEditorConfiguration(metadata);
         }
     }
