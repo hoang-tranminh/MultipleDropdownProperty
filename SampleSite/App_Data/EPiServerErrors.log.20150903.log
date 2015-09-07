@@ -1,0 +1,45 @@
+﻿2015-09-03 22:32:52,216 [1] ERROR EPiServer.Framework.Initialization.InitializationEngine: Type lookup failed detail #1 (limit 20): EPiServer.Framework.TypeScanner.TypeScannerReflectionException: Failed to load types from MultipleDropdownProperty ---> System.Reflection.ReflectionTypeLoadException: Unable to load one or more of the requested types. Retrieve the LoaderExceptions property for more information.
+   at System.Reflection.RuntimeModule.GetTypes(RuntimeModule module)
+   at System.Reflection.RuntimeModule.GetTypes()
+   at System.Reflection.Assembly.GetTypes()
+   at EPiServer.Framework.TypeScanner.ReflectionAssemblyScanner.GetRawTypes(Assembly assembly)
+   at EPiServer.Framework.TypeScanner.ReflectionAssemblyScanner.GetTypes(Assembly assembly)
+   --- End of inner exception stack trace ---
+   at EPiServer.Framework.TypeScanner.ReflectionAssemblyScanner.GetTypes(Assembly assembly)
+   at EPiServer.Framework.TypeScanner.CachingAssemblyScanner.GetTypes(Assembly assembly)
+   at EPiServer.Framework.Initialization.InitializationEngineTypeScanner.<>c__DisplayClass4.<CreateLookup>b__1(Assembly assembly)
+2015-09-03 22:32:52,224 [1] ERROR EPiServer.Framework.Initialization.InitializationEngine: Type lookup failed detail #1 LoaderException (limit 20): System.IO.FileLoadException: Could not load file or assembly 'EPiServer.Shell, Version=8.11.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7' or one of its dependencies. The located assembly's manifest definition does not match the assembly reference. (Exception from HRESULT: 0x80131040)
+File name: 'EPiServer.Shell, Version=8.11.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7'
+
+WRN: Assembly binding logging is turned OFF.
+To enable assembly bind failure logging, set the registry value [HKLM\Software\Microsoft\Fusion!EnableLog] (DWORD) to 1.
+Note: There is some performance penalty associated with assembly bind failure logging.
+To turn this feature off, remove the registry value [HKLM\Software\Microsoft\Fusion!EnableLog].
+
+2015-09-03 22:32:52,224 [1] ERROR EPiServer.Framework.Initialization.InitializationEngine: Type lookup failed detail #1 LoaderException (limit 20): System.IO.FileLoadException: Could not load file or assembly 'EPiServer, Version=8.11.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7' or one of its dependencies. The located assembly's manifest definition does not match the assembly reference. (Exception from HRESULT: 0x80131040)
+File name: 'EPiServer, Version=8.11.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7'
+
+WRN: Assembly binding logging is turned OFF.
+To enable assembly bind failure logging, set the registry value [HKLM\Software\Microsoft\Fusion!EnableLog] (DWORD) to 1.
+Note: There is some performance penalty associated with assembly bind failure logging.
+To turn this feature off, remove the registry value [HKLM\Software\Microsoft\Fusion!EnableLog].
+
+2015-09-03 22:40:47,527 [1] ERROR EPiServer.Framework.Initialization.InitializationEngine: Initialize action failed for Initialize on class EPiServer.Data.DataInitialization, EPiServer.Data, Version=8.11.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7
+System.NotSupportedException: The database 'EPiServerDB' has not been updated to the version '7021.0', current database version is '7019.0'. Update the database manually by running the cmdlet 'update-epidatabase' in the package manager console or set 'updateDatabaseSchema="true"' on episerver.framework configuration element
+   at EPiServer.Data.SchemaUpdates.DatabaseSchemaManagerImplementation.ThrowUpdateDatabaseException(Version databaseVersion, Version codeVersion, String connectionStringName)
+   at EPiServer.Data.SchemaUpdates.DatabaseSchemaManagerImplementation.EnureDatabaseSchemaVersion(ConnectionStringsSection connectionStrings, Boolean automaticSchemaUpdatesEnabled)
+   at EPiServer.Data.DataInitialization.ValidateDatabaseSchema(InitializationEngine context)
+   at EPiServer.Data.DataInitialization.Initialize(InitializationEngine context)
+   at EPiServer.Framework.Initialization.ModuleNode.<>c__DisplayClass5.<Initialize>b__4()
+   at EPiServer.Framework.Initialization.ModuleNode.Execute(Action a, String key)
+   at EPiServer.Framework.Initialization.ModuleNode.Initialize(InitializationEngine context)
+   at EPiServer.Framework.Initialization.InitializationEngine.InitializeModules()
+System.NotSupportedException: The database 'EPiServerDB' has not been updated to the version '7021.0', current database version is '7019.0'. Update the database manually by running the cmdlet 'update-epidatabase' in the package manager console or set 'updateDatabaseSchema="true"' on episerver.framework configuration element
+   at EPiServer.Data.SchemaUpdates.DatabaseSchemaManagerImplementation.ThrowUpdateDatabaseException(Version databaseVersion, Version codeVersion, String connectionStringName)
+   at EPiServer.Data.SchemaUpdates.DatabaseSchemaManagerImplementation.EnureDatabaseSchemaVersion(ConnectionStringsSection connectionStrings, Boolean automaticSchemaUpdatesEnabled)
+   at EPiServer.Data.DataInitialization.ValidateDatabaseSchema(InitializationEngine context)
+   at EPiServer.Data.DataInitialization.Initialize(InitializationEngine context)
+   at EPiServer.Framework.Initialization.ModuleNode.<>c__DisplayClass5.<Initialize>b__4()
+   at EPiServer.Framework.Initialization.ModuleNode.Execute(Action a, String key)
+   at EPiServer.Framework.Initialization.ModuleNode.Initialize(InitializationEngine context)
+   at EPiServer.Framework.Initialization.InitializationEngine.InitializeModules()

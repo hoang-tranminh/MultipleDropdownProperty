@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultipleDropdownProperty", "MultipleDropdownProperty\MultipleDropdownProperty.csproj", "{FE45F656-050E-468D-A017-ED817D2A81C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleSite", "SampleSite\SampleSite.csproj", "{FD6C996F-F8ED-4CDA-AADA-F31F092DA68B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FE45F656-050E-468D-A017-ED817D2A81C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE45F656-050E-468D-A017-ED817D2A81C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE45F656-050E-468D-A017-ED817D2A81C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE45F656-050E-468D-A017-ED817D2A81C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD6C996F-F8ED-4CDA-AADA-F31F092DA68B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD6C996F-F8ED-4CDA-AADA-F31F092DA68B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD6C996F-F8ED-4CDA-AADA-F31F092DA68B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD6C996F-F8ED-4CDA-AADA-F31F092DA68B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
