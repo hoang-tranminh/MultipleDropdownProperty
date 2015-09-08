@@ -6,6 +6,7 @@
 "dijit/_WidgetBase",
 "dijit/_TemplatedMixin",
 "dijit/_WidgetsInTemplateMixin",
+"dijit/form/FilteringSelect",
 "epi-cms/_ContentContextMixin", 
  "epi/dependency"
 ], function (
@@ -16,6 +17,7 @@
     _WidgetBase,
     _TemplatedMixin,
     _WidgetsInTemplateMixin,
+    FilteringSelect,
     _ContentContextMixin,
     dependency
     ) {
@@ -32,12 +34,12 @@
             choices1Label: "Choices 1", //label for first drop down
             choices2Label: "Choices 2", //label for second drop down
             value: null,
-            templateString: "<div>" +
-                                "<div><span>${choices1Label}: <span>" +
-                                    "<input data-dojo-type=\"dijit/form/FilteringSelect\" data-dojo-attach-point=\"choices1\">" +
+            templateString: "<div class=\"dijitReset dijitInputField dijitInputContainer dijitInline epi-resourceInputContainer\">" +
+                                "<div><span class=\"dropdownLabel\">${choices1Label}: <span>" +
+                                    "<input class=\"dropdown\" data-dojo-type=\"dijit/form/FilteringSelect\" data-dojo-attach-point=\"choices1\">" +
                                 "</div>" +
-                                "<div><span>${choices2Label}: <span>" +
-                                    "<input data-dojo-type=\"dijit/form/FilteringSelect\" data-dojo-attach-point=\"choices2\">" +
+                                "<div><span class=\"dropdownLabel\">${choices2Label}: <span>" +
+                                    "<input  class=\"dropdown\" data-dojo-type=\"dijit/form/FilteringSelect\" data-dojo-attach-point=\"choices2\">" +
                                 "</div>" +
                             "</div>",
             postMixInProperties: function () {
@@ -77,13 +79,19 @@
             startup: function () {
                 //all child widgets are created
 
+                //call the base implementation
+                this.inherited(arguments);
+
                 this.choices1.store = this.choices1Store;
                 this.choices1.startup();
 
                 //listen to change event of first drop down to 
                 //fill values for second dropdown 
                 var widget =this;
-                on(this.choices1, "change", function (e){ widget._firstDropdownChanged(e); });
+                on(this.choices1, "change", function (e) { widget._firstDropdownChanged(e); });
+
+
+                on(widget.choices1, "focus", function (e) { widget._dropdownOnFocus(e); });
 
                 //set first item to be selected!
                 var dd1 = this.choices1;
@@ -92,16 +100,30 @@
                         dd1.set('value', item.id);
                     }
                 });
-
-
-                //call the base implementation
-                this.inherited(arguments);
+               
             },
-            onChange: function () { },
+            onChange: function (value) {
+            },
+            onBlur: function (e) {
+            },
+            onFocus: function (value) {
+            },
+            _onChange: function (value) {
+                console.log("Notifying EPiServer with onChange: " + JSON.stringify(value));
+                this.onChange(value);
+                this.onBlur();
+                console.log("Done notitying EPiServer");
+            },
+            _dropdownOnFocus:function (e){
+                this.onFocus(e);
+            },
             _firstDropdownChanged: function (e) {
                 var data = [];
                 var firstItem = null;
                 var widget = this;
+
+                on(widget.choices2, "focus", function (e) { widget._dropdownOnFocus(e); });
+
                 this.choices2Store.query({ selectedFirstChoiceId: e, currentContentId: this._currentContext.id }).then(function (results) {
                     results.forEach(function (item, i) {
                         data.push(item);
@@ -113,24 +135,53 @@
                         widget.choices2.store = store2;
                         widget.choices2.startup();
 
+                        //listen to change event of second drop down to 
+                        //save selected values of dropdown 1 and 2 to "value" property of widget
+                        on(widget.choices2, "change", function (e) { widget._secondDropdownChanged(e); });
+
                         //set first item to be selected!
                         widget.choices2.set('value', firstItem.id);
                     }
+                    else {
+                        widget._secondDropdownChanged();
+                    }
+
                 });
             },
-            // Setter for value property
+            _secondDropdownChanged: function (e) {
+                this._onChange(this._getValueAttr());
+            },
+            //custom setter for value attribute
             _setValueAttr: function (value) {
-
-                this._set("value", value);
+                if (value && value.Choice1 && value.Choice2) {
+                    //call the base so that can base widget can raise observable events.
+                    this._set("value", value);
+                    if (value.Choice1.Id && this.choices1) {
+                        this.choices1.set('value', value.Choice1.Id);
+                    }
+                    if (value.Choice2.Id && this.choices2) {
+                        this.choices2.set('value', value.Choice2.Id);
+                    }
+                }
+            },
+            //custom getter for value attribute
+            _getValueAttr: function () {
+                var item = { Choice1: { Name: "", Id: "" }, Choice2: { Name: "", Id: "" } };
+                if (this.choices1.get('value')) {
+                    item.Choice1.Id = this.choices1.get('value');
+                    item.Choice1.Name = this.choices1.get('displayedValue');
+                }
+                if (this.choices2.get('value')) {
+                    item.Choice2.Id = this.choices2.get('value');
+                    item.Choice2.Name = this.choices2.get('displayedValue');
+                }
+                return item;
             },
             //Pretty self explanatory, returns wether our module is valid or not
             // what's interesting here is that epi will call isValid on every module to make sure the page is valid
             // This is the place to do any validation of the value entered by the user, in our case there won't really be any.
             isValid: function () {
-
-            },
-            contextChanged: function (context, callerData) {
-                var that = this;
+                return true;
             }
     });
 
