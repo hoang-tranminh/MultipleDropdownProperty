@@ -25,10 +25,18 @@ namespace MultipleDropdownProperty.RestStore
             _contentSearchHandler = contentSearchHandler;
             _templateResolver = templateResolver;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="selectedFirstChoiceId"></param>
+        /// <param name="currentContentId"></param>
+        /// <returns></returns>
         public override IEnumerable<ChoiceModel> GetChoices(string selectedFirstChoiceId, string currentContentId)
         {
             var catId = -1;
             Category cat = null;
+            var currentContent = ContentReference.EmptyReference;
             if (int.TryParse(selectedFirstChoiceId, out catId))
             {
                 cat = _categoryRepository.Get(catId);
@@ -38,15 +46,22 @@ namespace MultipleDropdownProperty.RestStore
             {
                 return new List<ChoiceModel>();
             }
+
+            ContentReference.TryParse(currentContentId, out currentContent);
+
             var resultList = new List<ChoiceModel>();
 
             var searchHanler = ServiceLocator.Current.GetInstance<SearchHandler>();
 
             var query = new CategoryQuery(LuceneOperator.OR);
-            query.Items.Add(cat.Name);
+            query.Items.Add(cat.ID.ToString());
 
             var results = searchHanler.GetSearchResults(query, 1, int.MaxValue);
             resultList.AddRange(results.IndexResponseItems.SelectMany(CreateHitModel));
+
+            if (currentContent != ContentReference.EmptyReference)
+                resultList.RemoveAll(i => i.Id == currentContent.ID.ToString());
+
             return resultList;
         }
 
@@ -76,7 +91,7 @@ namespace MultipleDropdownProperty.RestStore
             return new ChoiceModel
             {
                 Name = content.Name,
-                Value = content.ContentLink.ToString()
+                Id = content.ContentLink.ID.ToString()
             };
         }
     }

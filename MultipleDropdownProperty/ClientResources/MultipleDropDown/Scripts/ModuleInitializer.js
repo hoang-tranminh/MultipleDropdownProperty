@@ -30,6 +30,7 @@
             //our store contain ChoiceModel objects, each has namd and value properties, we have
             //to configure value property to be the IdProperty of this store.
             //firstStore.idProperty = "value";
+
             var secondStore = registry.create("multipledropdownproperty.secondchoicedropdownreststore", this._getRestPath("secondchoicedropdownreststore"));
             //secondStore.idProperty = "value";
         },

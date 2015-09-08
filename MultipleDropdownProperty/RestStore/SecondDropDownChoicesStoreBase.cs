@@ -23,17 +23,17 @@ namespace MultipleDropdownProperty.RestStore
         /// <returns></returns>
         public abstract IEnumerable<ChoiceModel> GetChoices(string selectedFirstChoiceId, string currentContentId);
 
-        public virtual RestResult Put(ChoiceModel model)
+        public virtual RestResult Put(ChoiceModel entity)
         {
             throw new NotSupportedException();
         }
 
-        public virtual RestResult Post(ChoiceModel model)
+        public virtual RestResult Post(ChoiceModel entity)
         {
             throw new NotSupportedException();
         }
 
-        public virtual RestResult Delete(string value)
+        public virtual RestResult Delete(int id)
         {
             return null;
         }

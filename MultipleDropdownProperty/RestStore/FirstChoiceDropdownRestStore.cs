@@ -22,7 +22,7 @@ namespace MultipleDropdownProperty.RestStore
         private void BuildCategoryTree(List<ChoiceModel> items, Category parent, string prefix)
         {
             var newPrefix = (prefix ==string.Empty ? string.Empty: (prefix + "/")) + parent.Name;
-            items.Add(new ChoiceModel() { Name = newPrefix, Value = parent.ID.ToString(), Id= parent.ID });
+            items.Add(new ChoiceModel() { Name = newPrefix, Id = parent.ID.ToString() });
             
             foreach (var cat in parent.Categories)
             {
@@ -31,7 +31,7 @@ namespace MultipleDropdownProperty.RestStore
             }
         }
 
-        public override IEnumerable<ChoiceModel> GetChoices(int? id, ItemRange range)
+        public override IEnumerable<ChoiceModel> GetChoices(int? id)
         {
             var choicesList = new List<ChoiceModel>();
             foreach (var cat in _categoryRepository.GetRoot().Categories)
