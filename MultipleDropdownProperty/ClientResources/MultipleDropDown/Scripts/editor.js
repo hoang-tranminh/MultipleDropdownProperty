@@ -171,7 +171,6 @@
                 if (value && value.choice1 && value.choice2) {
                     //call the base so that can base widget can raise observable events.
                     this._set("value", value);
-                    
                 }
             },
             //custom getter for value attribute
@@ -187,11 +186,11 @@
                 }
                 return item;
             },
-            //Pretty self explanatory, returns wether our module is valid or not
-            // what's interesting here is that epi will call isValid on every module to make sure the page is valid
-            // This is the place to do any validation of the value entered by the user, in our case there won't really be any.
+            //returns wether our module is valid or not
             isValid: function () {
-                return true;
+                if (this.choices1 && this.choices1.isValid())
+                    return true;
+                return false;
             }
     });
 
