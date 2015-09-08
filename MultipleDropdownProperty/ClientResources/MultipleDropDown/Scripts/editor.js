@@ -75,17 +75,20 @@
                 //not attached to DOM yet
 
                 this.choices1.store = this.choices1Store;
-                this.choices1.startup();
+                var widget = this;
+                this.choices1.store.query().then(function () {
+                    widget.choices1.startup();
+                    var currentValue = widget.value;
 
-                var currentValue = this.value;
+                    if (currentValue.choice1.id && widget.choices1) {
+                        widget.choices1.set('value', currentValue.choice1.id);
 
-                if (currentValue.choice1.id && this.choices1) {
-                    this.choices1.set('value', currentValue.choice1.id);
-
-                    if (currentValue.choice2.id && this.choices2) {
-                        this._setupStoreForSecondDropdown(currentValue.choice1.id, currentValue.choice2.id);
+                        if (currentValue.choice2.id && widget.choices2) {
+                            widget._setupStoreForSecondDropdown(currentValue.choice1.id, currentValue.choice2.id);
+                        }
                     }
-                }
+                });
+               
                 //call the base implementation
                 this.inherited(arguments);
             },
@@ -98,16 +101,24 @@
                 //listen to change event of first drop down to 
                 //fill values for second dropdown 
                 var widget =this;
-                on(widget.choices1, "change", function (e) { widget._firstDropdownChanged(e); });
+                on(widget.choices1, "change", function (e) {
+                    widget._firstDropdownChanged(e);
+                });
 
 
-                on(widget.choices1, "focus", function (e) { widget._dropdownOnFocus(e); });
+                on(widget.choices1, "focus", function (e) {
+                    widget._dropdownOnFocus(this, e);
+                });
                 
                 //listen to change event of second drop down to 
                 //save selected values of dropdown 1 and 2 to "value" property of widget
-                on(widget.choices2, "change", function (e) { widget._secondDropdownChanged(e); });
+                on(widget.choices2, "change", function (e) {
+                    widget._secondDropdownChanged(e);
+                });
 
-                on(widget.choices2, "focus", function (e) { widget._dropdownOnFocus(e); });
+                on(widget.choices2, "focus", function (e) {
+                    widget._dropdownOnFocus(this, e);
+                });
 
                 //first dropdown: set first item to be selected if non is selected
                 if (!this.choices1.get('value')) {
@@ -128,7 +139,7 @@
                 console.log("Done notitying EPiServer that we're done editing.");
                 this.onBlur();
             },
-            _dropdownOnFocus:function (e){
+            _dropdownOnFocus: function (obj, e) {
                 this.onFocus(e);
             },
             _firstDropdownChanged: function (e) {
