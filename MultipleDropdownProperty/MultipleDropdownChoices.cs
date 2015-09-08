@@ -10,8 +10,8 @@ namespace MultipleDropdownProperty
 {
     public class MultipleDropdownChoices
     {
-        ChoiceModel Choice1 { get; set; }
+        public ChoiceModel Choice1 { get; set; }
 
-        ChoiceModel Choice2 { get; set; }
+        public ChoiceModel Choice2 { get; set; }
     }
 }

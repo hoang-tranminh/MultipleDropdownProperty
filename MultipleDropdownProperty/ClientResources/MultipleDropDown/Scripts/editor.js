@@ -71,8 +71,21 @@
                 }
             },
             postCreate: function () {
-                //widgets has been render but not subwidgets, not attached to DOM yet
+                //widgets has been render but not sub widgets in container node, 
+                //not attached to DOM yet
 
+                this.choices1.store = this.choices1Store;
+                this.choices1.startup();
+
+                var currentValue = this.value;
+
+                if (currentValue.choice1.id && this.choices1) {
+                    this.choices1.set('value', currentValue.choice1.id);
+
+                    if (currentValue.choice2.id && this.choices2) {
+                        this._setupStoreForSecondDropdown(currentValue.choice1.id, currentValue.choice2.id);
+                    }
+                }
                 //call the base implementation
                 this.inherited(arguments);
             },
@@ -82,49 +95,52 @@
                 //call the base implementation
                 this.inherited(arguments);
 
-                this.choices1.store = this.choices1Store;
-                this.choices1.startup();
-
                 //listen to change event of first drop down to 
                 //fill values for second dropdown 
                 var widget =this;
-                on(this.choices1, "change", function (e) { widget._firstDropdownChanged(e); });
+                on(widget.choices1, "change", function (e) { widget._firstDropdownChanged(e); });
 
 
                 on(widget.choices1, "focus", function (e) { widget._dropdownOnFocus(e); });
+                
+                //listen to change event of second drop down to 
+                //save selected values of dropdown 1 and 2 to "value" property of widget
+                on(widget.choices2, "change", function (e) { widget._secondDropdownChanged(e); });
 
-                //set first item to be selected!
-                var dd1 = this.choices1;
-                this.choices1Store.query().forEach(function (item, i) {
-                    if (i == 0) {
-                        dd1.set('value', item.id);
-                    }
-                });
-               
+                on(widget.choices2, "focus", function (e) { widget._dropdownOnFocus(e); });
+
+                //first dropdown: set first item to be selected if non is selected
+                if (!this.choices1.get('value')) {
+                    var dd1 = this.choices1;
+                    this.choices1Store.query().forEach(function (item, i) {
+                        if (i == 0) {
+                            dd1.set('value', item.id);
+                        }
+                    });
+                }
             },
-            onChange: function (value) {
-            },
-            onBlur: function (e) {
-            },
-            onFocus: function (value) {
-            },
+            onChange: function (value) { },
+            onBlur: function (e) { },
+            onFocus: function (value) { },
             _onChange: function (value) {
                 console.log("Notifying EPiServer with onChange: " + JSON.stringify(value));
                 this.onChange(value);
+                console.log("Done notitying EPiServer that we're done editing.");
                 this.onBlur();
-                console.log("Done notitying EPiServer");
             },
             _dropdownOnFocus:function (e){
                 this.onFocus(e);
             },
             _firstDropdownChanged: function (e) {
+                _setupStoreForSecondDropdown(e);
+            },
+            _setupStoreForSecondDropdown: function (selectedFirstChoiceId, selectedId) {
                 var data = [];
-                var firstItem = null;
                 var widget = this;
-
-                on(widget.choices2, "focus", function (e) { widget._dropdownOnFocus(e); });
-
-                this.choices2Store.query({ selectedFirstChoiceId: e, currentContentId: this._currentContext.id }).then(function (results) {
+                var firstItem = null;
+                var firstChoiceId = selectedFirstChoiceId;
+                var sId = selectedId;
+                this.choices2Store.query({ selectedFirstChoiceId: firstChoiceId, currentContentId: this._currentContext.id }).then(function (results) {
                     results.forEach(function (item, i) {
                         data.push(item);
                         if (i == 0) firstItem = item;
@@ -135,17 +151,16 @@
                         widget.choices2.store = store2;
                         widget.choices2.startup();
 
-                        //listen to change event of second drop down to 
-                        //save selected values of dropdown 1 and 2 to "value" property of widget
-                        on(widget.choices2, "change", function (e) { widget._secondDropdownChanged(e); });
+                        var id = sId ? sId : firstItem.id;
 
-                        //set first item to be selected!
-                        widget.choices2.set('value', firstItem.id);
-                    }
-                    else {
+                        //set first item or selected item from param to be selected!
+                        if (!widget.choices2.get('value')) {
+                            widget.choices2.set('value', id);
+                        }
+                    } else {
+                        //if found no items from server for 2nd dropdown
                         widget._secondDropdownChanged();
                     }
-
                 });
             },
             _secondDropdownChanged: function (e) {
@@ -153,27 +168,22 @@
             },
             //custom setter for value attribute
             _setValueAttr: function (value) {
-                if (value && value.Choice1 && value.Choice2) {
+                if (value && value.choice1 && value.choice2) {
                     //call the base so that can base widget can raise observable events.
                     this._set("value", value);
-                    if (value.Choice1.Id && this.choices1) {
-                        this.choices1.set('value', value.Choice1.Id);
-                    }
-                    if (value.Choice2.Id && this.choices2) {
-                        this.choices2.set('value', value.Choice2.Id);
-                    }
+                    
                 }
             },
             //custom getter for value attribute
             _getValueAttr: function () {
-                var item = { Choice1: { Name: "", Id: "" }, Choice2: { Name: "", Id: "" } };
+                var item = { choice1: { name: "", id: "" }, choice2: { name: "", id: "" } };
                 if (this.choices1.get('value')) {
-                    item.Choice1.Id = this.choices1.get('value');
-                    item.Choice1.Name = this.choices1.get('displayedValue');
+                    item.choice1.id = this.choices1.get('value');
+                    item.choice1.name = this.choices1.get('displayedValue');
                 }
                 if (this.choices2.get('value')) {
-                    item.Choice2.Id = this.choices2.get('value');
-                    item.Choice2.Name = this.choices2.get('displayedValue');
+                    item.choice2.id = this.choices2.get('value');
+                    item.choice2.name = this.choices2.get('displayedValue');
                 }
                 return item;
             },
