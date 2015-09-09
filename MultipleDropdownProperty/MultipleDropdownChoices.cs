@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace MultipleDropdownProperty
 {
+    /// <summary>
+    /// Object to represent selected options of two dropdowns
+    /// </summary>
     public class MultipleDropdownChoices
     {
         public ChoiceModel Choice1 { get; set; }

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace MultipleDropdownProperty.RestStore
 {
+    /// <summary>
+    /// Represent an option in a dropdown
+    /// </summary>
     public class ChoiceModel
     {
         public string Name { get; set; }

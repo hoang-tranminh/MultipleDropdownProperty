@@ -11,10 +11,12 @@ namespace MultipleDropdownProperty
 {
     [PropertyDefinitionTypePlugIn(
         DisplayName="Multiple dropdown", 
-        Description="Show multiple dropdowns, values in second dropdown are dependent on selected values " +
-        " in first dropdown.")]
+        Description="Show multiple dropdowns, values in second dropdown are dependent on selected values in first dropdown.")]
     public class MultipleDropDownProperty: PropertyLongString
     {
+        /// <summary>
+        /// Return MultipleDropdownChoices type to application code
+        /// </summary>
         public override Type PropertyValueType
         {
             get
@@ -23,6 +25,9 @@ namespace MultipleDropdownProperty
             }
         }
 
+        /// <summary>
+        /// Internally, we use Json to serialize & deserialize MultipleDropdownChoices value object to & from string
+        /// </summary>
         public override object Value
         {
             get
