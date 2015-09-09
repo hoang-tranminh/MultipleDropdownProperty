@@ -15,6 +15,7 @@ namespace SampleSite.Models.Pages
     {
         [UIHint("Dropdowns")]
         [BackingType(typeof(MultipleDropDownProperty))]
+        [Display(Name ="Page with a specific category", Description ="After select a category in first dropdown, we can select a page with that category in second dropdown")]
         public virtual MultipleDropdownChoices DropDowns { get; set; }
     }
 }

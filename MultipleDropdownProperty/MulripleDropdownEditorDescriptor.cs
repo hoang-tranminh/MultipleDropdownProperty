@@ -15,6 +15,7 @@ namespace MultipleDropdownProperty
 
         protected override void SetEditorConfiguration(EPiServer.Shell.ObjectEditing.ExtendedMetadata metadata)
         {
+            //we send some custom initialization parameters to our Dojo widget here!
             EditorConfiguration["choice1StoreName"] = "multipledropdownproperty.firstchoicedropdownreststore";
             EditorConfiguration["choice2StoreName"] = "multipledropdownproperty.secondchoicedropdownreststore";
             base.SetEditorConfiguration(metadata);

@@ -173,12 +173,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ClientResources\MultipleDropDown\Styles\" />
     <Folder Include="Resources\LanguageFiles\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ClientResources\MultipleDropDown\Scripts\editor.js" />
     <Content Include="ClientResources\MultipleDropDown\Scripts\ModuleInitializer.js" />
+    <Content Include="ClientResources\MultipleDropDown\Styles\styles.css" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

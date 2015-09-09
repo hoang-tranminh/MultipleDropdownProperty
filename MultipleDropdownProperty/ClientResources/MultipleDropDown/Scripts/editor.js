@@ -1,6 +1,5 @@
 ﻿define([
 "dojo/_base/declare",
-"dojo/_base/xhr",
 "dojo/on",
 "dojo/store/Memory",
 "dijit/_WidgetBase",
@@ -11,7 +10,6 @@
  "epi/dependency"
 ], function (
     declare,
-    xhr,
     on,
     Memory,
     _WidgetBase,
@@ -23,25 +21,25 @@
     ) {
     return declare("multipledropdownproperty.scripts.editor",
         [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _ContentContextMixin], {
-            constructor: function (params) {
-                //"params" contained all settings sent from class MultipleDropdownEditorDescriptor at server side
-                //"params" will be mixed in after this constructor is call and before postMixInProperties is called
-            },
             choices1StoreName: "",
             choices1Store: null, //data store for first drop down
             choices2StoreName: "",
             choices2Store: null, //data store for second drop down
-            choices1Label: "Choices 1", //label for first drop down
-            choices2Label: "Choices 2", //label for second drop down
-            value: null,
+            choices1Label: "Categories", //label for first drop down
+            choices2Label: "Pages", //label for second drop down
+            value: null,  //required for EPiServer CMS
             templateString: "<div class=\"dijitReset dijitInputField dijitInputContainer dijitInline epi-resourceInputContainer\">" +
-                                "<div><span class=\"dropdownLabel\">${choices1Label}: <span>" +
-                                    "<input class=\"dropdown\" data-dojo-type=\"dijit/form/FilteringSelect\" data-dojo-attach-point=\"choices1\">" +
+                                "<div><span class=\"dropdownLabel\">${choices1Label}: </span>" +
+                                    "<input class=\"dropdown\" data-dojo-type=\"dijit/form/FilteringSelect\" data-dojo-attach-point=\"choices1\"/>" +
                                 "</div>" +
-                                "<div><span class=\"dropdownLabel\">${choices2Label}: <span>" +
-                                    "<input  class=\"dropdown\" data-dojo-type=\"dijit/form/FilteringSelect\" data-dojo-attach-point=\"choices2\">" +
+                                "<div><span class=\"dropdownLabel\">${choices2Label}: </span>" +
+                                    "<input  class=\"dropdown\" data-dojo-type=\"dijit/form/FilteringSelect\" data-dojo-attach-point=\"choices2\"/>" +
                                 "</div>" +
                             "</div>",
+            constructor: function (params) {
+                //"params" contained all settings sent from class MultipleDropdownEditorDescriptor at server side
+                //"params" will be mixed in after this constructor is call and before postMixInProperties is called
+            },
             postMixInProperties: function () {
                 //called after constructor and after parameters are mixed in current widget instance
                 //before DOM nodes are created
@@ -50,21 +48,12 @@
                 this.inherited(arguments);
 
                 //get setting values from server
-                //from EPiServer specific params attribute
                 if (this.params.choice1StoreName) {
-                    //this.apiGetChoices1 = this.params.apiGetChoices1;
-                    //this.choices1Store = new JsonRest({ target: this.apiGetChoices1 });
-                    //this.choices1Store = new Memory({idProperty:"value", data: [{name:"option 1", value:0},{name:"option 2", value:1}]});
-
                     this.choices1StoreName = this.params.choice1StoreName;
                     var registry = dependency.resolve("epi.storeregistry");
                     this.choices1Store = registry.get(this.choices1StoreName);
                 }
                 if (this.params.choice2StoreName) {
-                    //this.apiGetChoices2 = this.params.apiGetChoices2;
-                    //this.choices2Store = new JsonRest({ target: this.apiGetChoices2 });
-                    //this.choices2Store = new Memory({data: [{name:"choice 1", value:0},{name:"choice 2", value:1}]});
-
                     this.choices2StoreName = this.params.choice2StoreName;
                     var registry = dependency.resolve("epi.storeregistry");
                     this.choices2Store = registry.get(this.choices2StoreName);
@@ -130,20 +119,21 @@
                     });
                 }
             },
-            onChange: function (value) { },
-            onBlur: function (e) { },
-            onFocus: function (value) { },
+            onChange: function (value) { }, //required for EPiServer CMS
+            onBlur: function (e) { },      //required for EPiServer CMS
+            onFocus: function (value) { }, //required for EPiServer CMS
             _onChange: function (value) {
                 console.log("Notifying EPiServer with onChange: " + JSON.stringify(value));
                 this.onChange(value);
-                console.log("Done notitying EPiServer that we're done editing.");
+                console.log("Notitying EPiServer that we're done editing.");
                 this.onBlur();
             },
             _dropdownOnFocus: function (obj, e) {
                 this.onFocus(e);
             },
             _firstDropdownChanged: function (e) {
-                _setupStoreForSecondDropdown(e);
+                this.choices2.set('value', null);
+                this._setupStoreForSecondDropdown(e);
             },
             _setupStoreForSecondDropdown: function (selectedFirstChoiceId, selectedId) {
                 var data = [];
@@ -197,7 +187,7 @@
                 }
                 return item;
             },
-            //returns wether our module is valid or not
+            //returns wether our module is valid or not, required for EPiServer CMS
             isValid: function () {
                 if (this.choices1 && this.choices1.isValid())
                     return true;
