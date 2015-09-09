@@ -32,6 +32,7 @@
         },
 
         _getRestPath: function (name) {
+            //we use the default module area named "app" of EPiServer Shell module
             return routes.getRestPath({ moduleArea: "app", storeName: name });
         }
     });

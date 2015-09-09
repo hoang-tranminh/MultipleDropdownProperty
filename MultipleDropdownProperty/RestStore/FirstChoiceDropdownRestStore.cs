@@ -40,7 +40,5 @@ namespace MultipleDropdownProperty.RestStore
             }
             return choicesList;
         }
-
-
     }
 }

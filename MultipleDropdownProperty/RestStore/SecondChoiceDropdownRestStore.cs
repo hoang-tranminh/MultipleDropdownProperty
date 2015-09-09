@@ -26,12 +26,7 @@ namespace MultipleDropdownProperty.RestStore
             _templateResolver = templateResolver;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="selectedFirstChoiceId"></param>
-        /// <param name="currentContentId"></param>
-        /// <returns></returns>
+       
         public override IEnumerable<ChoiceModel> GetChoices(string selectedFirstChoiceId, string currentContentId)
         {
             var catId = -1;

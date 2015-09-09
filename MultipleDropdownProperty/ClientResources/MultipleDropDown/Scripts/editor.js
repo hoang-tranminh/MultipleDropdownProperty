@@ -60,12 +60,16 @@
                 }
             },
             postCreate: function () {
-                //widgets has been render but not sub widgets in container node, 
-                //not attached to DOM yet
+                //widgets has been render but not attached to DOM yet
 
                 this.choices1.store = this.choices1Store;
                 var widget = this;
+                
+                //we query all items of the store from server side (probably take some time)
+                //then data bind the first dropdown,
                 this.choices1.store.query().then(function () {
+
+                    //data bind the first dropdown
                     widget.choices1.startup();
                     var currentValue = widget.value;
 
@@ -73,6 +77,7 @@
                         widget.choices1.set('value', currentValue.choice1.id);
 
                         if (currentValue.choice2.id && widget.choices2) {
+                            //query data for second dropdown based on first selection, then bind this data to second dropdown
                             widget._setupStoreForSecondDropdown(currentValue.choice1.id, currentValue.choice2.id);
                         }
                     }
@@ -94,7 +99,7 @@
                     widget._firstDropdownChanged(e);
                 });
 
-
+                
                 on(widget.choices1, "focus", function (e) {
                     widget._dropdownOnFocus(this, e);
                 });
@@ -141,6 +146,8 @@
                 var firstItem = null;
                 var firstChoiceId = selectedFirstChoiceId;
                 var sId = selectedId;
+
+                //query data for second dropdown based on first selection, then bind this data to second dropdown
                 this.choices2Store.query({ selectedFirstChoiceId: firstChoiceId, currentContentId: this._currentContext.id }).then(function (results) {
                     results.forEach(function (item, i) {
                         data.push(item);
@@ -148,6 +155,9 @@
                     });
 
                     if (firstItem != null) {
+
+                        //after querying to get items from server side, put them in a
+                        //memory store to bind to second dropdown
                         var store2 = new Memory({ data: data });
                         widget.choices2.store = store2;
                         widget.choices2.startup();

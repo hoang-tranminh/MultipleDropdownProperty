@@ -18,7 +18,7 @@ namespace MultipleDropdownProperty.RestStore
         }
 
         /// <summary>
-        /// Should return all the choices for first drop down. 
+        /// Should return all the choices based on selected value of first drop down and current editing content
         /// </summary>
         /// <returns></returns>
         public abstract IEnumerable<ChoiceModel> GetChoices(string selectedFirstChoiceId, string currentContentId);
